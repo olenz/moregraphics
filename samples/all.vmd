@@ -1,0 +1,15 @@
+package require moregraphics
+
+# generate a new, empty molecule
+set molid [mol new]
+
+::moregraphics::doublesphere pos {0 0 0}
+	
+::moregraphics::doublesphere \
+    pos {0 5 0} dir {0 1 1} \
+    resolution 20 \
+    color1 white color2 green \
+    radius 1.5
+
+::moregraphics::doublecone pos {5 0 0}
+

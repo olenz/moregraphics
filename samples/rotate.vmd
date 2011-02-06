@@ -1,0 +1,35 @@
+package require moregraphics
+
+set molid [mol new]
+display update on
+
+for { set step 0 } { $step < 1000 } { incr step } {
+    set theta [expr ($step/333.3 * 2.*3.14159)]
+    set phi [expr ($step/200.0 * 2.*3.14159)]
+
+    set dir "[expr sin($theta)*cos($phi)] [expr sin($theta)*sin($phi)] [expr cos($theta)]"
+#    puts "phi=$phi theta=$theta"
+
+    ::moregraphics::doublesphere dir $dir \
+	replace oldgids newgids \
+	resolution 20
+ 
+    ::moregraphics::doublesphere pos {0 5 0} dir $dir \
+	shift 0.5 radius 0.5 \
+	replace oldgids newgids \
+	resolution 6 
+
+    ::moregraphics::doublecone pos {5 0 0} dir $dir \
+	replace oldgids newgids
+
+    ::moregraphics::doublecone pos {5 5 0} dir $dir \
+	length 2.0 \
+	replace oldgids newgids
+
+    set oldgids $newgids
+    set newgids ""
+
+    display update ui
+    after 10
+}
+
