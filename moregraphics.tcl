@@ -198,8 +198,8 @@ namespace eval ::moregraphics:: {
 	return [list $gid1 $gid2]
     }
     
-    # doublecone <options>
-    #   generates two slightly shifted spheres
+    # arrow <options>
+    #   generates an arrow
     #
     # Options:
     # mol <int> [top]
@@ -208,7 +208,10 @@ namespace eval ::moregraphics:: {
     # color1 <colorid> [red]
     # color2 <colorid> [blue]
     # replace <var> <var>
-    # radius <float> [1.0]
+    # radius <float> [0.2]
+    # coneradius <float> [2.0]
+    # conelength <float> [0.2]
+    # resolution <int> [6]
     proc arrow args {
 	set none {}
 
@@ -217,12 +220,13 @@ namespace eval ::moregraphics:: {
 	set dir {1 0 0}
 	set color1 "red"
 	set color2 "blue"
+	set length 1.0
+	set radius 0.2
+	set coneradius 2.0
+	set conelength 0.5
+	set resolution 6
 	set oldvar mg_oldgids
 	set newvar mg_newgids
-	set length 1.0
-	set radius 1.0
-	set shift 0.01
-	set resolution 6
 
 	# Parse options
 	while {[llength $args] > 0} {
@@ -238,27 +242,31 @@ namespace eval ::moregraphics:: {
 		    set newvar [lshift args] 
 		}
 		"radius"     { set radius [lshift args] }
+		"coneradius"     { set coneradius [lshift args] }
+		"conelength"     { set conelength [lshift args] }
 		"length"     { set length [lshift args] }
 		"resolution" { set resolution [lshift args] }
-		default { error "error: doublesphere: unknown option: $arg" }
+		default { error "error: arrow: unknown option: $arg" }
 	    }
 	}
 
 	if { $molid == "top" } then { set molid [ molinfo top ] }
 
-	set tipvec [vecscale $length [vecnorm $dir]]
-	set tip1 [vecadd $pos $tipvec]
-	set tip2 [vecadd $pos [vecinvert $tipvec]]
+	set lenvec [vecscale $length [vecnorm $dir]]
+	set base [vecadd $pos [vecscale -0.5 $lenvec]]
+	set tip [vecadd $pos [vecscale 0.5 $lenvec]]
+	set conebase [vecadd $base \
+	    [vecscale [expr 1.0-$conelength] $lenvec]]
 	
 	upvar $oldvar oldgids
 	upvar $newvar newgids
 	
 	set gid1 [moregraphics $molid $color1 oldgids \
-		      cone $pos $tip1 radius $radius \
+		      cone $conebase $tip radius [expr $coneradius*$radius] \
 		      resolution $resolution]
 	set gid2 [moregraphics $molid $color2 oldgids \
-		      cylinder $pos $tip2 radius $radius \
-		      resolution $resolution]
+		      cylinder $base $conebase radius $radius \
+		      resolution $resolution filled yes]
 	lappend newgids $gid1 $gid2
 	return [list $gid1 $gid2]
     }
