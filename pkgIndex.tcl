@@ -8,4 +8,4 @@
 # script is sourced, the variable $dir must contain the
 # full path name of this file's directory.
 
-package ifneeded moregraphics 1.0 [list source [file join $dir moregraphics.tcl]]
+package ifneeded moregraphics 0.9 [list source [file join $dir moregraphics.tcl]]

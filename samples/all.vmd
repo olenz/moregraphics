@@ -9,15 +9,12 @@ set molid [mol new]
 
 ::moregraphics::arrow pos {-5 0 0}
 
-::moregraphics::doublesphere pos {0 5 0} \
-    dir {1 1 0} \
+::moregraphics::doublesphere pos {0 5 0} dir {1 1 0} \
     color1 white color2 green
 
-::moregraphics::doublecone pos {5 5 0} \
-    dir {1 1 0} \
+::moregraphics::doublecone pos {5 5 0} dir {1 1 0} \
     color1 white color2 green
 
-::moregraphics::arrow pos {-5 5 0} \
-    dir {1 1 0} \
+::moregraphics::arrow pos {-5 5 0} dir {1 1 0} \
     color1 white color2 green
 			   
