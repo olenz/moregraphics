@@ -64,11 +64,38 @@ namespace eval ::moregraphics:: {
 	return ""
     }
 
+    # delete <options> gids
+    #   delete a list of gids as they are created by the various
+    #   commands below.
+    #
+    # Options:
+    # molid <int> [top]
+    proc delete args {
+	set molid "top"
+
+	if { [lindex $args 0] == "molid" } then {
+	    lshift args
+	    set molid [lshift args]
+	}
+
+	if { $molid == "top" } then { set molid [ molinfo top ] }
+	
+	foreach arg $args {
+	    if { [llength $arg] >= 1 } then {
+		foreach gid $arg {
+		    if { [graphics $molid exists $gid] } then {
+			graphics $molid delete $gid
+		    }
+		}
+	    }
+	}
+    }
+
     # doublesphere <options>
     #   generates two slightly shifted spheres
     #
     # Options:
-    # mol <int> [top]
+    # molid <int> [top]
     # pos <vec> [{0 0 0}]
     # dir <vec> [{1 0 0}]
     # color1 <colorid> [red]
@@ -135,7 +162,7 @@ namespace eval ::moregraphics:: {
     #   generates two slightly shifted spheres
     #
     # Options:
-    # mol <int> [top]
+    # molid <int> [top]
     # pos <vec> [{0 0 0}]
     # dir <vec> [{1 0 0}]
     # color1 <colorid> [red]
@@ -202,7 +229,7 @@ namespace eval ::moregraphics:: {
     #   generates an arrow
     #
     # Options:
-    # mol <int> [top]
+    # molid <int> [top]
     # pos <vec> [{0 0 0}]
     # dir <vec> [{1 0 0}]
     # color1 <colorid> [red]

@@ -43,3 +43,5 @@ for { set step 0 } { $step < 1000 } { incr step } {
     after 10
 }
 
+::moregraphics::delete $oldgids
+
